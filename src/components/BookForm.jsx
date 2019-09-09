@@ -17,6 +17,10 @@ export default function BookForm({ onSubmit, onReset, book, shouldReset }) {
   const [author, setAuthor] = useState(book ? book.author : '');
   const [price, setPrice] = useState(book ? book.price : 0.0);
 
+  /**
+   * @desc when new book is added, shouldReset will trigger a change
+   * reset all options to starting values
+   */
   useEffect(() => {
     if (shouldReset) {
       setTitle('');
@@ -25,6 +29,9 @@ export default function BookForm({ onSubmit, onReset, book, shouldReset }) {
     }
   }, [shouldReset]);
 
+  /**
+   * @desc prevent page reload and pass book object to parent function
+   */
   const handleSubmit = e => {
     e.preventDefault();
     onSubmit({

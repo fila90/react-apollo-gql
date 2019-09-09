@@ -12,18 +12,26 @@ export default function Create({ history }) {
         data: { createBook },
       }
     ) {
-      const { books } = cache.readQuery({ query: GET_BOOKS });
+      const data = cache.readQuery({ query: GET_BOOKS });
+      data.books.push(createBook);
       cache.writeQuery({
+        data,
         query: GET_BOOKS,
-        data: { books: books.concat([createBook]) },
       });
     },
   });
 
+  /**
+   * @desc pass varaibles to createBook mutation
+   * @param {Object} book
+   */
   const handleSubmit = book => {
     createBook({ variables: { ...book } });
   };
 
+  /**
+   * @desc return to List view
+   */
   const handleReset = () => {
     history.replace('/');
   };

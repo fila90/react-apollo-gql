@@ -34,6 +34,11 @@ const BookEditImg = styled.img`
   width: 2rem;
 `;
 
+/**
+ * @desc single book components
+ * display all info regarding the book
+ * integrate edit link
+ */
 export default function Book({ book }) {
   return (
     <BookWrap>
