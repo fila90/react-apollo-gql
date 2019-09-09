@@ -5,7 +5,7 @@ import {
   Switch,
   Redirect,
 } from 'react-router-dom';
-import RouteLoader from './components/styled/RouteLoader'
+import RouteLoader from './components/styled/RouteLoader';
 
 const List = lazy(() => import('./views/List'));
 const Edit = lazy(() => import('./views/Edit'));
