@@ -2,7 +2,7 @@ import { gql } from 'apollo-boost';
 import { BookDetails } from './fragments';
 
 const GET_BOOKS = gql`
-  query Books {
+  query GetBooks {
     books {
       ...BookDetails
     }
@@ -12,7 +12,7 @@ const GET_BOOKS = gql`
 `;
 
 const GET_SINGLE_BOOK = gql`
-  query Book($id: Int!) {
+  query GetBook($id: Int!) {
     book(bookId: $id) {
       ...BookDetails
     }
@@ -23,12 +23,12 @@ const GET_SINGLE_BOOK = gql`
 
 const EDIT_BOOK = gql`
   mutation EditBook(
-    $id: Int!
+    $bookId: Int!
     $title: String!
     $author: String!
     $price: Float!
   ) {
-    editBook(bookId: $id, title: $title, author: $author, price: $price) {
+    editBook(bookId: $bookId, title: $title, author: $author, price: $price) {
       ...BookDetails
     }
   }

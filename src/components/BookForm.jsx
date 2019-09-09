@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const Form = styled.form`
@@ -12,10 +12,18 @@ const FormLabel = styled.label`
   margin-bottom: 1rem;
 `;
 
-export default function BookForm({ onSubmit, onReset, book }) {
-  const [title, setTitle] = useState(book.title || '');
-  const [author, setAuthor] = useState(book.author || '');
-  const [price, setPrice] = useState(book.price || 0.0);
+export default function BookForm({ onSubmit, onReset, book, shouldReset }) {
+  const [title, setTitle] = useState(book ? book.title : '');
+  const [author, setAuthor] = useState(book ? book.author : '');
+  const [price, setPrice] = useState(book ? book.price : 0.0);
+
+  useEffect(() => {
+    if (shouldReset) {
+      setTitle('');
+      setAuthor('');
+      setPrice(0.0);
+    }
+  }, [shouldReset]);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -23,7 +31,7 @@ export default function BookForm({ onSubmit, onReset, book }) {
       title,
       author,
       price,
-      bookId: book.bookId || null,
+      bookId: book ? book.bookId : null,
     });
   };
 
