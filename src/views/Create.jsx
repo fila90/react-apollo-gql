@@ -4,20 +4,24 @@ import BookForm from '../components/BookForm';
 import ViewWrap from '../components/styled/ViewWrap';
 import { CREATE_BOOK, GET_BOOKS } from '../api';
 
+/**
+ * @desc create new book
+ * clear form after book is created
+ */
 export default function Create({ history }) {
   const [createBook, { loading, error, data }] = useMutation(CREATE_BOOK, {
-    update(
-      cache,
-      {
-        data: { createBook },
+    // manually add new book to the books cache
+    update: (cache, { data: { createBook } }) => {
+      try {
+        const data = cache.readQuery({ query: GET_BOOKS });
+        data.books.push(createBook);
+        cache.writeQuery({
+          data,
+          query: GET_BOOKS,
+        });
+      } catch (err) {
+        console.error('books not fetched');
       }
-    ) {
-      const data = cache.readQuery({ query: GET_BOOKS });
-      data.books.push(createBook);
-      cache.writeQuery({
-        data,
-        query: GET_BOOKS,
-      });
     },
   });
 

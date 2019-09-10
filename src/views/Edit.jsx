@@ -2,8 +2,12 @@ import React from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import BookForm from '../components/BookForm';
 import ViewWrap from '../components/styled/ViewWrap';
-import { GET_SINGLE_BOOK, EDIT_BOOK, GET_BOOKS } from '../api';
+import { GET_SINGLE_BOOK, EDIT_BOOK, GET_BOOKS, GET_TOTAL_PRICE } from '../api';
 
+/**
+ * @desc edit book
+ * manually update cache data
+ */
 export default function Edit({ match, history }) {
   const id = match.params.id;
   const { loading, error, data } = useQuery(GET_SINGLE_BOOK, {
@@ -12,7 +16,32 @@ export default function Edit({ match, history }) {
   const [
     editBook,
     { loading: editLoading, error: editError, data: editData },
-  ] = useMutation(EDIT_BOOK, { refetchQueries: [{ query: GET_BOOKS }] });
+  ] = useMutation(EDIT_BOOK, {
+    // update books and book cache data
+    update: (cache, { data: { editBook } }) => {
+      try {
+        const { books } = cache.readQuery({ query: GET_BOOKS });
+        const newBooks = books.map(b => {
+          if (b.bookId === editBook.bookId) {
+            b = { ...b, ...editBook };
+          }
+          return b;
+        });
+        cache.writeQuery({
+          query: GET_BOOKS,
+          data: { books: newBooks },
+        });
+        cache.writeQuery({
+          query: GET_SINGLE_BOOK,
+          variables: { id },
+          data: { book: editBook },
+        });
+      } catch (err) {
+        console.error('books not fetched');
+      }
+    },
+    refetchQueries: [{ query: GET_TOTAL_PRICE }],
+  });
 
   if (loading) return <div>loading</div>;
   if (error) return <div>error</div>;
@@ -33,6 +62,7 @@ export default function Edit({ match, history }) {
 
   /**
    * @desc return to List view
+   * @param {Object} e
    */
   const handleReset = e => {
     history.replace('/');
