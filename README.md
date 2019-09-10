@@ -1,3 +1,15 @@
+Clone [this](https://github.com/alacrity-law/apollo-test-app) repo and check the README for installation and execution of GraphQL server.
+
+Clone this repo, enter it and do:
+
+### `yarn install`
+
+### `yarn start`
+
+
+
+# Other React stuff
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
